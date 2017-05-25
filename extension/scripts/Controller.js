@@ -324,7 +324,14 @@ SitemapController.prototype = {
 							message: 'The start URL is not a valid URL'
 						}
 					}
-				}
+				},
+				"scriptToInjectDelay": {
+					validators: {
+						numeric: {
+							message: 'Delay must be numeric'
+						}
+					}
+				},
 			}
 		});
 	},
@@ -432,10 +439,14 @@ SitemapController.prototype = {
 				startUrl.push($(element).val());
 			});
 		}
-
+		var scriptToInject = $("#scriptInject").val();
+		var scriptToInjectDelay = $("#scriptToInjectDelay").val();
+		
 		return {
 			id:id,
-			startUrl:startUrl
+			startUrl:startUrl,
+			scriptToInject:scriptToInject,
+			scriptToInjectDelay:scriptToInjectDelay
 		};
 	},
 
@@ -529,6 +540,8 @@ SitemapController.prototype = {
 
 			// change data
 			sitemap.startUrl = sitemapData.startUrl;
+			sitemap.scriptToInject = sitemapData.scriptToInject;
+			sitemap.scriptToInjectDelay = sitemapData.scriptToInjectDelay;
 
 			// just change sitemaps url
 			if (sitemapData.id === sitemap._id) {

@@ -38,6 +38,19 @@
 			</div>
 		{{/startUrl.push}}
 		<div class="form-group">
+			<label for="scriptInject" class="col-lg-1 control-label">Inject script after page load</label>
+
+			<div class="col-lg-10">
+				<textarea id="scriptInject" name="scriptInject" rows="7" class="form-control">{{scriptToInject}}</textarea>
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="scriptToInjectDelay" class="col-lg-1 control-label">Script Inject delay (ms)</label>
+			<div class="col-lg-10">
+				<input type="text" class="form-control" name="scriptToInjectDelay" id="scriptToInjectDelay" placeholder="Script Inject delay" value="{{scriptToInjectDelay}}">
+			</div>
+		</div>
+		<div class="form-group">
 			<div class="col-lg-offset-1 col-lg-10">
 				<button type="submit" class="btn btn-primary" id="submit-edit-sitemap">Save Sitemap</button>
 			</div>

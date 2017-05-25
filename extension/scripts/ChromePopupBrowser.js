@@ -33,7 +33,7 @@ ChromePopupBrowser.prototype = {
 		});
 	},
 
-	loadUrl: function (url, callback) {
+	loadUrl: function (url, scriptToInject, scriptInjectDelay, callback) {
 
 		var tab = this.tab;
 
@@ -45,15 +45,22 @@ ChromePopupBrowser.prototype = {
 
 					// remove event listener
 					chrome.tabs.onUpdated.removeListener(tabLoadListener);
+					var delay = parseInt(this.pageLoadDelay);
+					if(scriptToInject){
+						chrome.tabs.executeScript(tabId, {code: scriptToInject, runAt: "document_end"});
+						delay+= scriptInjectDelay;
+					}
 
 					// callback tab is loaded after page load delay
-					setTimeout(callback, this.pageLoadDelay);
+					setTimeout(callback, delay);
 				}
 			}
 		}.bind(this);
+
 		chrome.tabs.onUpdated.addListener(tabLoadListener);
 
 		chrome.tabs.update(tab.id, {url: url});
+		
 	},
 
 	close: function () {
@@ -66,8 +73,15 @@ ChromePopupBrowser.prototype = {
 
 		this._initPopupWindow(function () {
 			var tab = browser.tab;
+			
+			var scriptToInject;
+			var scriptInjectDelay = 0;
+			if(parentSelectorId == "_root" && sitemap.scriptToInject !== undefined){
+				scriptToInject = sitemap.scriptToInject;
+				scriptInjectDelay = parseInt(sitemap.scriptToInjectDelay) || 0;
+			}
 
-			browser.loadUrl(url, function () {
+			browser.loadUrl(url, scriptToInject, scriptInjectDelay, function () {
 
 				var message = {
 					extractData: true,
